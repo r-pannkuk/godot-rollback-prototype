@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://ckw0vkcuwdoe6"]
+
+[ext_resource type="Script" path="res://scripts/bomb.gd" id="1_qsdwd"]
+[ext_resource type="PackedScene" uid="uid://c0x4narq1u14q" path="res://scenes/explosion.tscn" id="2_g22ee"]
+[ext_resource type="Texture2D" uid="uid://cd64f7vm56lk5" path="res://assets/bomb.png" id="2_n73e0"]
+[ext_resource type="Script" path="res://addons/godot-rollback-netcode/NetworkTimer.gd" id="3_owk2v"]
+[ext_resource type="Script" path="res://addons/godot-rollback-netcode/NetworkAnimationPlayer.gd" id="5_pxjfd"]
+
+[sub_resource type="Animation" id="Animation_2514b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_y3jsf"]
+resource_name = "tick"
+length = 0.5
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_35j4a"]
+_data = {
+"RESET": SubResource("Animation_2514b"),
+"tick": SubResource("Animation_y3jsf")
+}
+
+[node name="Bomb" type="SGFixedNode2D"]
+position = Vector2(0, -1)
+script = ExtResource("1_qsdwd")
+explosion_scene = ExtResource("2_g22ee")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -19)
+texture = ExtResource("2_n73e0")
+hframes = 10
+
+[node name="ExplosionTimer" type="Node" parent="."]
+script = ExtResource("3_owk2v")
+wait_ticks = 30
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_35j4a")
+}
+script = ExtResource("5_pxjfd")

@@ -1,0 +1,160 @@
+[gd_scene load_steps=2 format=3 uid="uid://cghs4exepwa87"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_lcksf"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_lcksf")
+
+[node name="Players" type="Node2D" parent="."]
+position = Vector2(577, 320)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
+spawn_path = NodePath("../Players")
+spawn_limit = 4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MessageLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+horizontal_alignment = 1
+
+[node name="SyncLostLabel" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -118.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "Reconnecting..."
+
+[node name="MainMenu" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Offline" type="Button" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+text = "Play
+Offline"
+
+[node name="Online" type="Button" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+text = "Play
+Online"
+
+[node name="ConnectionPanel" type="Window" parent="CanvasLayer"]
+title = "Online"
+initial_position = 1
+size = Vector2i(250, 110)
+visible = false
+min_size = Vector2i(250, 110)
+max_size = Vector2i(32768, 110)
+
+[node name="Panel" type="Panel" parent="CanvasLayer/ConnectionPanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ConnectionPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -11.0
+offset_top = -5.5
+offset_right = 71.0
+offset_bottom = 65.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 77
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Host" type="Label" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+text = "Host:"
+horizontal_alignment = 2
+
+[node name="HostField" type="LineEdit" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+size_flags_stretch_ratio = 3.8
+placeholder_text = "127.0.0.1"
+
+[node name="Port" type="Label" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+text = "Port:"
+horizontal_alignment = 2
+
+[node name="PortField" type="LineEdit" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+size_flags_stretch_ratio = 3.8
+placeholder_text = "8080"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Host" type="Button" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Host
+"
+
+[node name="Join" type="Button" parent="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Join
+"
+
+[node name="Reset" type="Button" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "RESET"
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/Offline" to="." method="_on_offline_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/Online" to="." method="_on_online_pressed"]
+[connection signal="close_requested" from="CanvasLayer/ConnectionPanel" to="." method="_on_connection_panel_close_requested"]
+[connection signal="pressed" from="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/Host" to="." method="_host"]
+[connection signal="pressed" from="CanvasLayer/ConnectionPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/Join" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Reset" to="." method="_on_reset_pressed"]
